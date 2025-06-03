@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simulated Patient Node Uploader</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7; }
+    h2 { color: #333; }
+    button { padding: 10px 20px; font-size: 16px; }
+    #status { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Simulated Firebase Uploader – Chronic IoT</h2>
+  <p>This tool uploads dummy data to your Firebase Realtime Database.</p>
+  <button onclick="uploadToFirebase()">Send Mock Data</button>
+  <div id="status"></div>
+
+  <script>
+    function uploadToFirebase() {
+      const data = {
+        timestamp: new Date().toISOString(),
+        bodyTemp: 36.7,
+        pulse: 78,
+        gasDetected: false,
+        ecgSim: 1024,
+        lightLevel: 880
+      };
+
+      fetch("https://system-for-chronic-illness-default-rtdb.firebaseio.com/patient1/data.json", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(res => {
+        document.getElementById("status").innerHTML = "<b>✅ Upload Successful!</b>";
+        console.log("Uploaded:", res);
+      })
+      .catch(err => {
+        document.getElementById("status").innerHTML = "<b>❌ Upload Failed</b>";
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
